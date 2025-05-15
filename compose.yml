@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:15@sha256:fe45ed1a824b81c0c9c605890963b67501758ca8c946db89089c85ce0f88e974
+    volumes:
+      - db:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pr388
+    command: postgres -c listen_addresses='*'
+    ports:
+      - "25432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+volumes:
+ db:
